@@ -12,7 +12,7 @@ class ResultBar extends React.Component {
     return (
       <div>
         <div onClick={() => this.setState({show:!this.state.show})} style={{backgroundColor: this.props.success ? "green" : "red", width: "100%",height: "20px"}}>
-          {(this.props.response || {} ).url}                        (click to expand)
+          {(this.props.response || {} ).url} (click me)
 
         </div>
         {this.state.show && <div>
