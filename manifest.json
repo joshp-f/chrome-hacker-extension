@@ -12,7 +12,7 @@
   "content_scripts": [
   { "run_at" :"document_end",
   "matches": ["<all_urls>"],
-  "html":["index.html"]
+  "js":["jquery.min.js","entrypoint.js"]
   }
   ],
   "permissions": ["activeTab"],

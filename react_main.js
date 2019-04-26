@@ -6,8 +6,9 @@ class ReactMain extends React.Component {
   constructor(props) {
     super(props);
     const payloads = 'robots.txt'
+    const baseurl = 'https://www.google.com'
     const code = 'fetch("/"+payload)'
-    this.state = {payloads,code};
+    this.state = {payloads,code,baseurl};
   }
   componentDidMount() {
     this.runStartup();
@@ -15,13 +16,17 @@ class ReactMain extends React.Component {
 
 
   }
+  changeURL = (baseurl) => {
+    const code = 'fetch("'+baseurl+'/"+payload)'
+    this.setState({baseurl,code},this.runStartup)
+  }
   changeList = async (e) => {
     const response = await fetch('wordlists/'+e.target.value+'.txt');
     const payloads = await response.text();
     this.setState({payloads})
   }
   runStartup = async () => {
-   const robots = await this.testRequest(fetch('/robots.txt'), this.correctStatus) 
+   const robots = await this.testRequest(fetch(this.state.baseurl+'/robots.txt'), this.correctStatus) 
    this.setState({robots})
   }
   runSearch = async () => {
@@ -42,13 +47,22 @@ class ReactMain extends React.Component {
     const payloadfiles = ['directories','subdomains','numbers','sqli','xss','empty','coursespecific']
     return (
       <div>
+        <h1>
+          Chrome hacker extension
+        </h1>
+        <p>
+          Um so I really rushed this so I made the mistake of using uncompiled react, meaning I could not easily dynamically inject it using a chrome extension :( In the future I will fix this.        </p>
+        <h3>
+          Enter base url
+        </h3>
+        <input onChange={(e) => this.changeURL(e.target.value)} value={this.state.baseurl}></input>
         <section>
           <h3>
             Spicy recon websites
           </h3>
           <a href="https://dnsdumpster.com/">dnsdumpster</a>
           <br />
-          <a href={"https://transparencyreport.google.com/https/certificates?cert_search_auth=&cert_search_cert=&cert_search=include_expired:false;include_subdomains:true;domain:"+document.domain+"&lu=cert_search"}>google transparency report</a>
+          <a href={"https://transparencyreport.google.com/https/certificates?cert_search_auth=&cert_search_cert=&cert_search=include_expired:false;include_subdomains:true;domain:"+this.state.baseurl+"&lu=cert_search"}>google transparency report</a>
 
         </section>
         <hr/>
